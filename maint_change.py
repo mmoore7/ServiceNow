@@ -10,6 +10,8 @@ driver = webdriver.Firefox()
 driver.get('https://jefferson.service-now.com/navpage.do')
 time.sleep(3)
 
+driver.maximize_window()
+
 id_box = driver.find_element_by_name('j_username')
 id_box.send_keys('mlm042')
 
@@ -44,12 +46,15 @@ configuration_item.send_keys(Keys.ENTER)
 time.sleep(3)
 
 driver.implicitly_wait(2)
+
+#CM Ticket #
 package_id = driver.find_element_by_xpath("//*[@id='change_request.u_package_id']")
 package_id.send_keys('T140-***')
-# #Priority
+
+#Priority
 driver.find_element_by_xpath("//*[@id='change_request.u_priority']/option[@value='3']").click()
 
-# #Type
+#Type
 driver.find_element_by_xpath("//*[@name='change_request.type']/option[@value='Maintenance']").click()
 
 #Assignment group
@@ -70,8 +75,6 @@ master_files.send_keys('VCG')
 master_files.send_keys(Keys.ENTER)
 
 lock_btn = driver.find_element_by_xpath("//*[@id='change_request.u_master_file_list_lock']")
-lock_btn.click()
-unlock_btn.click()
 lock_btn.click()
 
 #Reason for change
