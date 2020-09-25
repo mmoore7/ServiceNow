@@ -49,7 +49,7 @@ driver.implicitly_wait(2)
 
 #CM Ticket #
 package_id = driver.find_element_by_xpath("//*[@id='change_request.u_package_id']")
-package_id.send_keys('T140-***')
+package_id.send_keys('T140-')
 
 #Priority
 driver.find_element_by_xpath("//*[@id='change_request.u_priority']/option[@value='3']").click()
