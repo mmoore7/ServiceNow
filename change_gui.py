@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from changes import CreateChange
 import re
 import os
 import pickle
@@ -57,10 +58,10 @@ class Window(Frame):
         campus_key_label = Label(self, text="Campus Key")
         campus_key_label.place(relx=-0.150, rely=0.11, relwidth=0.5, relheight=0.07)
 
-        self.login = StringVar()
+        self.campus_key = StringVar()
         if settings_exist:
-            self.login.set(setttings['userid'])
-        campus_key_entry = Entry(self, textvariable=self.login)
+            self.campus_key.set(setttings['userid'])
+        campus_key_entry = Entry(self, textvariable=self.campus_key)
         campus_key_entry.focus()
         campus_key_entry.place(relx=0.03, rely=0.17, relwidth=0.4, relheight=0.07)
 
@@ -69,15 +70,42 @@ class Window(Frame):
 
         password_entry = Entry(self, show='*')
         password_entry.place(relx=0.03, rely=0.32, relwidth=0.4, relheight=0.07)
+        self.password = password_entry
 
         ini_label = Label(self, text='Master File')
         ini_label.place(relx=-0.11, rely=0.4, relwidth=0.4, relheight=0.07)
 
-        ini_entry = OptionMenu(self, StringVar(),'CER - Rules', 'VCG - Grouper')
+        options = StringVar()
+        ini_entry = OptionMenu(self, options,'CER - Rules', 'VCG - Grouper')
         ini_entry.place(relx=0.03, rely=0.47, relwidth=0.4, relheight=0.07)
+        self.ini = options
+
+        submit_btn = Button(self, text="Create Change", command=self.submit_clicked)
+        submit_btn.place(relx=0.04, rely=0.7)
 
     def client_exit(self):
         exit() # built-in python function
+
+    def validate_entry(self):
+        if not all([self.campus_key.get(), self.password.get(), self.ini.get()]):
+            messagebox.showerror("This is so wrong", "One or more entries are missing")
+            return False
+        return True
+
+    def submit_clicked(self):
+        if self.validate_entry():
+            login_settings ={
+                'userid':self.campus_key.get(),
+                'password':self.password.get(),
+                'ini':self.ini.get()
+            }
+            # https://stackoverflow.com/questions/31044753/how-to-verify-whether-a-browser-exists-in-selenium-webdriver
+            session = CreateChange(login_settings)
+            session.start_browser()
+            session.login()
+            session.create_change()
+        else:
+            print('ERROR')
 
 root = Tk() # define root window
 root.geometry("600x400")
