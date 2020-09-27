@@ -13,10 +13,11 @@ class Window(Frame):
 
         self.master = master
         self.init_window()
+        self.session = None
 
     def init_window(self):
 
-        self.master.title("Healthy Planet Automated Change Tickets")
+        self.master.title('Healthy Planet Automated Change Tickets')
         self.pack(fill=BOTH, expand=1)
 
         if os.path.exists('data/settings.pickle'):
@@ -33,9 +34,9 @@ class Window(Frame):
         self.master.config(menu=menu)
 
         file = Menu(menu)
-        file.add_command(label="Save", command=self.client_exit)
-        file.add_command(label="Exit", command=self.client_exit)
-        menu.add_cascade(label="File", menu=file)
+        file.add_command(label='Save', command=self.client_exit)
+        file.add_command(label='Exit', command=self.client_exit)
+        menu.add_cascade(label='File', menu=file)
 
         edit = Menu(menu)
         edit.add_command(label='Nothing here', command=None)
@@ -48,49 +49,61 @@ class Window(Frame):
         msg = Message(
                         self,
                         text="Welcome to Matthew Moore's Automated Change Tickets, made painstakingly by me, Matthew Moore.",
-                        bg="#696969",
+                        bg='#696969',
                         aspect=530,
                         width=500,
                         justify='center'
                     )
         msg.place(relx=0, rely=0, relwidth=1, relheight=0.1)
 
-        campus_key_label = Label(self, text="Campus Key")
+        campus_key_label = Label(self, text='Campus Key')
         campus_key_label.place(relx=-0.150, rely=0.11, relwidth=0.5, relheight=0.07)
 
         self.campus_key = StringVar()
         if settings_exist:
             self.campus_key.set(setttings['userid'])
-        campus_key_entry = Entry(self, textvariable=self.campus_key)
-        campus_key_entry.focus()
-        campus_key_entry.place(relx=0.03, rely=0.17, relwidth=0.4, relheight=0.07)
+        self.campus_key_entry = Entry(self, textvariable=self.campus_key)
+        self.campus_key_entry.focus()
+        self.campus_key_entry.place(relx=0.03, rely=0.17, relwidth=0.4, relheight=0.07)
 
-        password_label = Label(self, text="Password")
+        password_label = Label(self, text='Password')
         password_label.place(relx=-0.165, rely=0.25, relwidth=0.5, relheight=0.07)
 
-        password_entry = Entry(self, show='*')
-        password_entry.place(relx=0.03, rely=0.32, relwidth=0.4, relheight=0.07)
-        self.password = password_entry
+        self.password_entry = Entry(self, show='*')
+        self.password_entry.place(relx=0.03, rely=0.32, relwidth=0.4, relheight=0.07)
+        self.password = self.password_entry
 
         ini_label = Label(self, text='Master File')
         ini_label.place(relx=-0.11, rely=0.4, relwidth=0.4, relheight=0.07)
 
-        options = StringVar()
-        ini_entry = OptionMenu(self, options,'CER - Rules', 'VCG - Grouper')
-        ini_entry.place(relx=0.03, rely=0.47, relwidth=0.4, relheight=0.07)
-        self.ini = options
+        self.options = StringVar()
+        self.ini_entry = OptionMenu(self, self.options,'CER - Rules', 'VCG - Grouper')
+        self.ini_entry.place(relx=0.03, rely=0.47, relwidth=0.4, relheight=0.07)
+        self.ini = self.options
 
-        submit_btn = Button(self, text="Create Change", command=self.submit_clicked)
-        submit_btn.place(relx=0.04, rely=0.7)
+        submit_btn = Button(self, text='Create Change', command=self.submit_clicked)
+        submit_btn.place(relx=0.03, rely=0.7)
+
+        clear_btn = Button(self, text='Clear Data', command=self.clear_all_entries)
+        clear_btn.place(relx=0.28, rely=0.7)
 
     def client_exit(self):
         exit() # built-in python function
 
     def validate_entry(self):
         if not all([self.campus_key.get(), self.password.get(), self.ini.get()]):
-            messagebox.showerror("This is so wrong", "One or more entries are missing")
             return False
         return True
+
+    def clear_all_entries(self):
+        self.campus_key_entry.delete(0, END)
+        self.password_entry.delete(0, END)
+        self.options.set('')
+
+    def clear_login_entry(self):
+        self.campus_key_entry.delete(0, END)
+        self.password_entry.delete(0, END)
+        self.campus_key_entry.focus()
 
     def submit_clicked(self):
         if self.validate_entry():
@@ -99,16 +112,25 @@ class Window(Frame):
                 'password':self.password.get(),
                 'ini':self.ini.get()
             }
-            # https://stackoverflow.com/questions/31044753/how-to-verify-whether-a-browser-exists-in-selenium-webdriver
-            session = CreateChange(login_settings)
-            session.start_browser()
-            session.login()
-            session.create_change()
+
+            if not self.session:
+                self.session = CreateChange(login_settings)
+                self.session.start_browser()
+            else:
+                self.session.update_login_settings(login_settings)
+
+            try:
+                self.session.login()
+                self.session.create_change()
+            except Exception as e:
+                self.session.driver.minimize_window()
+                messagebox.showerror('Hold Up', 'Wrong username/password')
+                self.clear_login_entry()
         else:
-            print('ERROR')
+            messagebox.showerror('This is so wrong', 'One or more entries are missing')
 
 root = Tk() # define root window
-root.geometry("600x400")
+root.geometry('600x400')
 app = Window(root) # reference window class with root
 
 sp = os.getcwd() # get the path of the current directory

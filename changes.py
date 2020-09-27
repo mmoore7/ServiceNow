@@ -18,13 +18,34 @@ class CreateChange():
 
     def login(self):
         id_box = self.driver.find_element_by_name('j_username')
+        id_box.clear()
         id_box.send_keys(self.userid)
 
         pass_box = self.driver.find_element_by_name('j_password')
+        pass_box.clear()
         pass_box.send_keys(self.password)
 
         login_button = self.driver.find_element_by_name('_eventId_proceed')
         login_button.click()
+
+        wrong_password = None
+        try:
+            self.driver.implicitly_wait(2)
+            wrong_password = self.driver.find_element_by_xpath('/html/body/div/div[2]/div[2]/section/p')
+        except:
+            pass
+
+        if wrong_password:
+            raise Exception("Wrong password entered")
+
+    def update_login_settings(self, settings):
+        self.userid = settings['userid']
+        self.password = settings['password']
+        self.ini = settings['ini']
+        self.driver.maximize_window()
+
+    def quit(self):
+        self.driver.quit()
 
     def create_change(self):
         self.driver.implicitly_wait(10)
