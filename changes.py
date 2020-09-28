@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
+from change_template import Templates as tp
 import time
 
 class CreateChange():
@@ -10,13 +11,15 @@ class CreateChange():
         self.password = settings['password']
         self.ini = settings['ini']
         self.driver = webdriver.Firefox()
+        # self.chg_templates = Templates()
 
     def start_browser(self):
         self.driver.get('https://jefferson.service-now.com/navpage.do')
-        time.sleep(3)
+        time.sleep(1)
         self.driver.maximize_window()
 
     def login(self):
+        self.driver.implicitly_wait(3)
         id_box = self.driver.find_element_by_name('j_username')
         id_box.clear()
         id_box.send_keys(self.userid)
@@ -60,6 +63,11 @@ class CreateChange():
         iframe = self.driver.find_element_by_xpath("//*[@id='gsft_main']")
         self.driver.switch_to.frame(iframe)
 
+        #user name
+        self.driver.implicitly_wait(1)
+        user_name = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.assigned_to']")
+        user_name = user_name.get_attribute('value')
+
         #Category
         self.driver.find_element_by_xpath("//*[@id='change_request.category']/option[@value='Epic']").click()
 
@@ -90,29 +98,32 @@ class CreateChange():
 
         #Title
         title = self.driver.find_element_by_name('change_request.short_description')
-        title.send_keys('Maintenance Change: Update Grouper')
+        title.send_keys(f'Maintenance Change: {tp.template[self.ini]["title"]}')
 
         #Affected master files
         unlock_btn = self.driver.find_element_by_xpath("//*[@id='change_request.u_master_file_list_unlock']")
         unlock_btn.click()
 
         master_files = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.u_master_file_list']")
-        master_files.send_keys('VCG')
-        master_files.send_keys(Keys.ENTER)
+        for item in tp.template[self.ini]['ini']:
+            master_files.send_keys(item)
+            time.sleep(1)
+            master_files.click()
+            master_files.send_keys(Keys.ENTER)
 
         lock_btn = self.driver.find_element_by_xpath("//*[@id='change_request.u_master_file_list_lock']")
         lock_btn.click()
 
         #Reason for change
         rsn_for_chg = self.driver.find_element_by_name('change_request.u_reason_for_change')
-        rsn_for_chg.send_keys('***')
+        rsn_for_chg.send_keys(f'{tp.template[self.ini]["rsn"]}')
 
         #Migration Method
         self.driver.find_element_by_xpath("//*[@id='label.ni.change_request.u_migration_method_data_courier']").click()
 
         #Migrator
         migrator = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.u_migrator']")
-        migrator.send_keys('Matthew Moore')
+        migrator.send_keys(user_name)
         migrator.send_keys(Keys.ENTER)
 
         #Destination Environment
@@ -135,19 +146,19 @@ class CreateChange():
 
         #Change Plan
         chg_plan = self.driver.find_element_by_xpath("//*[@id='change_request.change_plan']")
-        chg_plan.send_keys('Update the grouper')
+        chg_plan.send_keys(tp.template[self.ini]['plan'])
 
         #Backout plan
         backout_plan = self.driver.find_element_by_xpath("//*[@id='change_request.backout_plan']")
-        backout_plan.send_keys('Undo the change')
+        backout_plan.send_keys(tp.template[self.ini]['backout'])
 
         #Test Plan
         tst_plan = self.driver.find_element_by_xpath("//*[@id='change_request.test_plan']")
-        tst_plan.send_keys('Verify grouper has correct records')
+        tst_plan.send_keys(tp.template[self.ini]['test'])
 
         #Tester
         tester = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.u_name_of_testing_person']")
-        tester.send_keys('Matthew Moore')
+        tester.send_keys(self.userid)
         tester.send_keys(Keys.ENTER)
 
         #End user communication

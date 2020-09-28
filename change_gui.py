@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from changes import CreateChange
+from change_template import Templates as tp
 import re
 import os
 import pickle
@@ -60,10 +61,7 @@ class Window(Frame):
         campus_key_label.place(relx=-0.150, rely=0.11, relwidth=0.5, relheight=0.07)
 
         self.campus_key = StringVar()
-        if settings_exist:
-            self.campus_key.set(setttings['userid'])
         self.campus_key_entry = Entry(self, textvariable=self.campus_key)
-        self.campus_key_entry.focus()
         self.campus_key_entry.place(relx=0.03, rely=0.17, relwidth=0.4, relheight=0.07)
 
         password_label = Label(self, text='Password')
@@ -73,19 +71,37 @@ class Window(Frame):
         self.password_entry.place(relx=0.03, rely=0.32, relwidth=0.4, relheight=0.07)
         self.password = self.password_entry
 
+        if settings_exist:
+            self.campus_key.set(settings)
+            self.password_entry.focus()
+        else:
+            self.campus_key_entry.focus()
+
         ini_label = Label(self, text='Master File')
         ini_label.place(relx=-0.11, rely=0.4, relwidth=0.4, relheight=0.07)
 
         self.options = StringVar()
-        self.ini_entry = OptionMenu(self, self.options,'CER - Rules', 'VCG - Grouper')
+        self.ini_entry = OptionMenu(self, self.options, *tp.master_files)
         self.ini_entry.place(relx=0.03, rely=0.47, relwidth=0.4, relheight=0.07)
         self.ini = self.options
+
+        self.save_settings = IntVar()
+        save_setting_box = Checkbutton(self, text='Remember Campus Key',
+                                      selectcolor='#696969', variable=self.save_settings,
+                                      command='')
+        save_setting_box.place(relx=-0.03, rely=0.58, relwidth=0.4, relheight=0.07)
 
         submit_btn = Button(self, text='Create Change', command=self.submit_clicked)
         submit_btn.place(relx=0.03, rely=0.7)
 
         clear_btn = Button(self, text='Clear Data', command=self.clear_all_entries)
         clear_btn.place(relx=0.28, rely=0.7)
+
+        load = Image.open('img/captain-planet-resized-icon.png')
+        render = ImageTk.PhotoImage(load)
+        img = Label(self, image=render)
+        img.image = render
+        img.place(relx=0.7, rely=0.1)
 
     def client_exit(self):
         exit() # built-in python function
@@ -117,8 +133,11 @@ class Window(Frame):
             login_settings ={
                 'userid':self.campus_key.get(),
                 'password':self.password.get(),
-                'ini':self.ini.get()
+                'ini':self.ini.get()[0:3]
             }
+            if self.save_settings.get()==1:
+                with open('data/settings.pickle', 'wb') as handle:
+                    pickle.dump(self.campus_key_entry.get(), handle)
 
             if not self.session_is_alive(self.session):
                 self.session = CreateChange(login_settings)
@@ -133,6 +152,7 @@ class Window(Frame):
                 self.session.driver.minimize_window()
                 messagebox.showerror('Hold Up', 'Wrong username/password')
                 self.clear_login_entry()
+                print(e)
 
         else:
             messagebox.showerror('This is so wrong', 'One or more entries are missing')
