@@ -105,6 +105,13 @@ class Window(Frame):
         self.password_entry.delete(0, END)
         self.campus_key_entry.focus()
 
+    def session_is_alive(self, driver):
+        try:
+            driver.title
+            return True
+        except:
+            return False
+
     def submit_clicked(self):
         if self.validate_entry():
             login_settings ={
@@ -113,7 +120,7 @@ class Window(Frame):
                 'ini':self.ini.get()
             }
 
-            if not self.session:
+            if not self.session_is_alive(self.session):
                 self.session = CreateChange(login_settings)
                 self.session.start_browser()
             else:
@@ -126,6 +133,7 @@ class Window(Frame):
                 self.session.driver.minimize_window()
                 messagebox.showerror('Hold Up', 'Wrong username/password')
                 self.clear_login_entry()
+
         else:
             messagebox.showerror('This is so wrong', 'One or more entries are missing')
 
