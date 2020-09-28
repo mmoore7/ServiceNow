@@ -81,10 +81,11 @@ class CreateChange():
         configuration_item.send_keys(Keys.ENTER)
         configuration_item.send_keys(Keys.ENTER)
 
-        self.driver.implicitly_wait(2)
+        self.driver.implicitly_wait(4)
 
         #CM Ticket #
         package_id = self.driver.find_element_by_xpath("//*[@id='change_request.u_package_id']")
+        package_id.click()
         package_id.send_keys('T140-')
 
         #Priority
