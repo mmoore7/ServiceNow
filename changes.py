@@ -64,7 +64,7 @@ class CreateChange():
         self.driver.switch_to.frame(iframe)
 
         #user name
-        self.driver.implicitly_wait(1)
+        self.driver.implicitly_wait(3)
         user_name = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.assigned_to']")
         user_name = user_name.get_attribute('value')
 
@@ -75,7 +75,9 @@ class CreateChange():
         configuration_item = self.driver.find_element_by_id('sys_display.change_request.cmdb_ci')
         configuration_item.click()
         configuration_item.click()
+        time.sleep(1)
         configuration_item.send_keys('Master File(s)')
+        time.sleep(1)
         configuration_item.send_keys(Keys.ENTER)
         configuration_item.send_keys(Keys.ENTER)
 
@@ -105,6 +107,7 @@ class CreateChange():
         unlock_btn.click()
 
         master_files = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.u_master_file_list']")
+        time.sleep(1)
         for item in tp.template[self.ini]['ini']:
             master_files.send_keys(item)
             time.sleep(1)
