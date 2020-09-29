@@ -10,8 +10,8 @@ class CreateChange():
         self.userid = settings['userid']
         self.password = settings['password']
         self.ini = settings['ini']
-        self.driver = webdriver.Firefox()
-        # self.chg_templates = Templates()
+        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver.exe')
+        # self.driver = webdriver.Firefox()
 
     def start_browser(self):
         self.driver.get('https://jefferson.service-now.com/navpage.do')

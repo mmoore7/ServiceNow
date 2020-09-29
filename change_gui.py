@@ -118,6 +118,7 @@ class Window(Frame):
         self.campus_key_entry.delete(0, END)
         self.password_entry.delete(0, END)
         self.options.set('')
+        self.campus_key_entry.focus()
 
     def clear_login_entry(self):
         self.campus_key_entry.delete(0, END)
