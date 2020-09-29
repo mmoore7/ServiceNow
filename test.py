@@ -23,10 +23,22 @@
 #
 # window.mainloop()
 
-from change_template import Templates
+# from change_template import Templates
+#
+# t = Templates()
+#
+# # print(t.template['CER']['title'])
+# for item in t.template['CER']['ini']:
+#     print
 
-t = Templates()
+from selenium import webdriver
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
+import time
 
-# print(t.template['CER']['title'])
-for item in t.template['CER']['ini']:
-    print
+driver = webdriver.Firefox()
+driver.get('https://jefferson.service-now.com/navpage.do')
+print(driver.title)
+driver.minimize_window()
+time.sleep(5)
+print(driver.title)

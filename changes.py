@@ -47,6 +47,13 @@ class CreateChange():
         self.ini = settings['ini']
         self.driver.maximize_window()
 
+    def check_title(self):
+        try:
+            self.driver.title
+            return True
+        except:
+            return False
+
     def quit(self):
         self.driver.quit()
 

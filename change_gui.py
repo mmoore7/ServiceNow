@@ -50,10 +50,13 @@ class Window(Frame):
         msg = Message(
                         self,
                         text="Welcome to Matthew Moore's Automated Change Tickets, made painstakingly by me, Matthew Moore.",
-                        bg='#696969',
+                        bg='#4c9dd5',
+                        bd=20,
+                        fg='black',
                         aspect=530,
                         width=500,
-                        justify='center'
+                        justify='center',
+                        font=('TkDefaultFont', 9, 'bold'),
                     )
         msg.place(relx=0, rely=0, relwidth=1, relheight=0.1)
 
@@ -87,7 +90,7 @@ class Window(Frame):
 
         self.save_settings = IntVar()
         save_setting_box = Checkbutton(self, text='Remember Campus Key',
-                                      selectcolor='#696969', variable=self.save_settings,
+                                      selectcolor='#4c9dd5', variable=self.save_settings,
                                       command='')
         save_setting_box.place(relx=-0.03, rely=0.58, relwidth=0.4, relheight=0.07)
 
@@ -97,11 +100,11 @@ class Window(Frame):
         clear_btn = Button(self, text='Clear Data', command=self.clear_all_entries)
         clear_btn.place(relx=0.28, rely=0.7)
 
-        load = Image.open('img/captain-planet-resized-icon.png')
+        load = Image.open('img/Globe-Internet-icon.png')
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
         img.image = render
-        img.place(relx=0.7, rely=0.1)
+        img.place(relx=0.5, rely=0.13)
 
     def client_exit(self):
         exit() # built-in python function
@@ -139,11 +142,12 @@ class Window(Frame):
                 with open('data/settings.pickle', 'wb') as handle:
                     pickle.dump(self.campus_key_entry.get(), handle)
 
-            if not self.session_is_alive(self.session):
+            try: # check to see if there's an existing minimized window and update login settings
+                self.session.check_title()
+                self.session.update_login_settings(login_settings)
+            except: # no existing title, so create new browser
                 self.session = CreateChange(login_settings)
                 self.session.start_browser()
-            else:
-                self.session.update_login_settings(login_settings)
 
             try:
                 self.session.login()
@@ -162,6 +166,6 @@ root.geometry('600x400')
 app = Window(root) # reference window class with root
 
 sp = os.getcwd() # get the path of the current directory
-# imgicon = PhotoImage(file=os.path.join(sp,'img/cash-credit.png'))
-# root.tk.call('wm', 'iconphoto', root._w, imgicon)
+imgicon = PhotoImage(file=os.path.join(sp,'img/Globe-Internet-icon.png'))
+root.tk.call('wm', 'iconphoto', root._w, imgicon)
 root.mainloop() # generates window
