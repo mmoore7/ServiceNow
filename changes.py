@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from change_template import Templates as tp
 from service import HiddenChromeService, HiddenChromeWebDriver
+import sys
 import time
 
 class CreateChange():
@@ -24,8 +25,10 @@ class CreateChange():
         # Remove notifications such as saving password
         chrome_options.add_experimental_option("prefs",prefs)
 
-        self.driver = HiddenChromeWebDriver(executable_path='./driver/chromedriver.exe', chrome_options=chrome_options)
-        # self.driver = webdriver.Firefox()
+        if sys.platform == 'Windows':
+            self.driver = HiddenChromeWebDriver(executable_path='./driver/chromedriver.exe', chrome_options=chrome_options)
+        else:
+            self.driver = webdriver.Firefox()
 
     def start_browser(self):
         self.driver.get('https://jefferson.service-now.com/navpage.do')
