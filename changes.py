@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from change_template import Templates as tp
+from service import HiddenChromeService, HiddenChromeWebDriver
 import time
 
 class CreateChange():
@@ -12,6 +13,7 @@ class CreateChange():
         self.ini = settings['ini']
         prefs = {
             'credentials_enable_service': False,
+            'hide_command_prompt_window': True,
             'profile': {
                 'password_manager_enabled': False
             }
@@ -22,8 +24,7 @@ class CreateChange():
         # Remove notifications such as saving password
         chrome_options.add_experimental_option("prefs",prefs)
 
-
-        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver.exe', options=chrome_options)
+        self.driver = HiddenChromeWebDriver(executable_path='./driver/chromedriver.exe', chrome_options=chrome_options)
         # self.driver = webdriver.Firefox()
 
     def start_browser(self):
