@@ -10,7 +10,20 @@ class CreateChange():
         self.userid = settings['userid']
         self.password = settings['password']
         self.ini = settings['ini']
-        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver.exe')
+        prefs = {
+            'credentials_enable_service': False,
+            'profile': {
+                'password_manager_enabled': False
+            }
+        }
+        chrome_options = webdriver.ChromeOptions();
+        # Remove automated software notification
+        chrome_options.add_experimental_option("excludeSwitches", ['enable-automation'])
+        # Remove notifications such as saving password
+        chrome_options.add_experimental_option("prefs",prefs)
+
+
+        self.driver = webdriver.Chrome(executable_path='./driver/chromedriver.exe', options=chrome_options)
         # self.driver = webdriver.Firefox()
 
     def start_browser(self):
@@ -103,8 +116,11 @@ class CreateChange():
 
         #Assignment group
         assignment_group = self.driver.find_element_by_name('sys_display.change_request.assignment_group')
-        assignment_group.send_keys('Enterprise Business Intelligence')
-        assignment_group.send_keys(Keys.ENTER)
+        if assignment_group.get_attribute('value') == '':
+            assignment_group.send_keys('Enterprise Business Intelligence')
+            assignment_group.send_keys(Keys.ENTER)
+        else:
+            pass
 
         #Title
         title = self.driver.find_element_by_name('change_request.short_description')
