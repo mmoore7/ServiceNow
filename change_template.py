@@ -2,11 +2,23 @@ class Templates():
     master_files = [
         'CER - Rules',
         'ETX/ELT/HH1/HHS - SmartTools',
+        'FLO - Flowsheets',
         'HFR - Registry',
         'HMT/HMP - Health Maintenance',
+        'HRX - Report Info',
         'LVN - Navigator',
         'PAF - Column',
         'VCG - Grouper',
+    ]
+
+    ebi_files = [
+        'HRX - Report Info',
+        'HGR - Report Templates',
+        'HGT - Query Template',
+        'HGP - Parameter Prompts',
+        'RPT - Report Output Files',
+        'IDM - Dashboard Configurations',
+        'IDB - Dashboard Component'
     ]
 
     template = {

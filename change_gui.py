@@ -18,7 +18,7 @@ class Window(Frame):
 
     def init_window(self):
 
-        self.master.title('Healthy Planet Automated Change Tickets')
+        self.master.title('Automated Change Tickets')
         self.pack(fill=BOTH, expand=1)
 
         if os.path.exists('data/settings.pickle'):
@@ -30,7 +30,6 @@ class Window(Frame):
                 os.mkdir('./data')
             settings_exist = False
 
-        self.change_types = ['CER - Rules', 'VCG - Grouper']
         menu = Menu(self.master)
         self.master.config(menu=menu)
 
@@ -100,6 +99,19 @@ class Window(Frame):
         clear_btn = Button(self, text='Clear Data', command=self.clear_all_entries)
         clear_btn.place(relx=0.28, rely=0.7)
 
+
+
+        self.app = StringVar()
+        app_label = Label(self, text="Hello")
+        app_label.place(relx=-0.150, rely=0.85, relwidth=0.5, relheight=0.07)
+        ebi_radial_btn = Radiobutton(self,text='EBI',value='EBI',variable=self.app,command=self.app_type)
+        ebi_radial_btn.place(relx=0.03,rely=0.9)
+        hp_radial_btn = Radiobutton(self,text='Healthy Planet',value="Healthy Planet",variable=self.app, command=self.app_type)
+        hp_radial_btn.place(relx=0.15,rely=0.9)
+
+        test_label = Label(self, text=self.app.get())
+        test_label.place(relx=-.150,rely=0.75,relwidth=0.5, relheight=0.07)
+
         load = Image.open('img/Globe-Internet-icon.png')
         render = ImageTk.PhotoImage(load)
         img = Label(self, image=render)
@@ -108,6 +120,21 @@ class Window(Frame):
 
     def client_exit(self):
         exit() # built-in python function
+
+    def update_lst(self, dropdown, files):
+        dropdown.configure(state='active')  # set the list to active state
+        dropdown['menu'].delete(0,'end') # remove the entries
+        for ini in files: #update the optionMenu variable with new list of values
+            dropdown['menu'].add_command(label=ini,command=lambda name=ini: self.options.set(ini))
+        return dropdown
+
+    def app_type(self):
+        if self.app.get() == 'EBI':
+            self.update_lst(self.ini_entry, tp.ebi_files)
+        else:
+            self.update_lst(self.ini_entry, tp.master_files)
+        print(self.app.get())
+        print(self.options)
 
     def validate_entry(self):
         if not all([self.campus_key.get(), self.password.get(), self.ini.get()]):

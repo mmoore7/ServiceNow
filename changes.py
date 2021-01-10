@@ -152,9 +152,16 @@ class CreateChange():
         #Migration Method
         self.driver.find_element_by_xpath("//*[@id='label.ni.change_request.u_migration_method_data_courier']").click()
 
-        #Migrator
+        #user email
+        # self.driver.find_element_by_id('viewr.change_request.requested_by').click()
+        email_field = self.driver.find_element_by_xpath("//*[@id='viewr.change_request.requested_by']")
+        email_field.click()
+        user_email = self.driver.find_element_by_xpath("//*[@id='sys_original.sys_user.email']").get_attribute('value')
+        email_field.click()
+
+        #Migrator - this field will only except email address in cases where there is more than 1 person with the same name
         migrator = self.driver.find_element_by_xpath("//*[@id='sys_display.change_request.u_migrator']")
-        migrator.send_keys(user_name)
+        migrator.send_keys(user_email)
         migrator.send_keys(Keys.ENTER)
 
         #Destination Environment
