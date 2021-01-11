@@ -2,10 +2,13 @@ class Templates():
     master_files = [
         'CER - Rules',
         'ETX/ELT/HH1/HHS - SmartTools',
+        'E0P - Action Criteria',
         'FLO - Flowsheets',
         'HFR - Registry',
         'HMT/HMP - Health Maintenance',
         'HRX - Report Info',
+        'IDM - Dashboard Configurations',
+        'IDB - Dashboard Component',
         'LVN - Navigator',
         'PAF - Column',
         'VCG - Grouper',
@@ -13,9 +16,9 @@ class Templates():
 
     ebi_files = [
         'HRX - Report Info',
-        'HGR - Report Templates',
+        'HGR/HGT/HGP/RPT - Report Templates',
         'HGT - Query Template',
-        'HGP - Parameter Prompts',
+        # 'HGP - Parameter Prompts',
         'RPT - Report Output Files',
         'IDM - Dashboard Configurations',
         'IDB - Dashboard Component'
@@ -54,6 +57,30 @@ class Templates():
             'backout':'Undo the change',
             'test':"""Move to SUP.\nVerify configuration.\nProcess registry and/or metrics.\nVerify metric data is correct"""
         },
+        'HGR': {
+            'title':'Update Report Templates',
+            'ini': ['HGR','HGT','HGP','RPT'],
+            'rsn': 'Update Report Template',
+            'plan': 'Update the template',
+            'backout': 'Undo the change',
+            'test':'Run report from template. Verify report runs as expected'
+        },
+        'HGT': {
+            'title':'Update Query Template',
+            'ini': ['HGT'],
+            'rsn': 'Update Query Template',
+            'plan': 'Update the template',
+            'backout': 'Undo the change',
+            'test':'Run report from template. Verify report runs as expected'
+        },
+        'HRX': {
+            'title':'Update/Create Report Workbench Report',
+            'ini': ['HRX','PAF'],
+            'rsn': 'Update/Create Report',
+            'plan': 'Create the report and/or update columns and report logic',
+            'backout': 'Undo the change',
+            'test': 'Run report. Verify it returns data as expected. Verify applicable columns sort as expected'
+        },
         'HMT': {
             'title':'Update Existing Health Maintenance Topics/Plans',
             'ini':['HMT','HMP','CER'],
@@ -61,6 +88,22 @@ class Templates():
             'plan':'Update the applicable HMT and/or HMP record.\nUpdate plan rule or registry completion metric.',
             'backout':'Undo changes',
             'test':'Open a patient chart.\nMake a change to the chart such as adding/removing an immunization.\nManually update health maintenance.\nVerify HMT appears as expected'
+        },
+        'IDM': {
+            'title':'Update/Create Dashboard',
+            'ini': ['IDM','IDB'],
+            'rsn':'Dashboard configuration',
+            'plan':'Build/update the dashboard',
+            'backout':'Undo the changes',
+            'test':'Open the dashboard. Verify dashboard displays data as expected. Verify dashboard reports run correctly.'
+        },
+        'IDB': {
+            'title':'Update/Create Dashboard Component',
+            'ini': ['IDB'],
+            'rsn':'Dashboard component configuration',
+            'plan':'Build/update the dashboard',
+            'backout':'Undo the changes',
+            'test':'Open the dashboard. Verify dashboard component displays data as expected. Verify dashboard reports run correctly.'
         },
         'LVN': {
             'title':'Update or Add Navigators for Existing Care Management Navigator Templates (LVN, VCN)',
@@ -77,6 +120,14 @@ class Templates():
             'plan':'Create column if applicable.\nUpdate column or associated LPP extension',
             'backout':'Undo the change',
             'test':'Add column to report.\nRun report and verify data appears as expected\nVerify sorting on column if applicable'
+        },
+        'RPT': {
+            'title':'Update/Create Report Template Configuration',
+            'ini': ['RPT'],
+            'rsn': 'Configure templates for reporting',
+            'plan': 'Make applicable changes to template',
+            'backout': 'Undo the changes',
+            'test': 'Run report from template. Verify it returns data as expected'
         },
         'VCG': {
             'title':'Update/Create Grouper',

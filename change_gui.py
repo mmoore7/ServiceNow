@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import tkinter.ttk as ttk
 from PIL import Image, ImageTk
 from changes import CreateChange
 from change_template import Templates as tp
@@ -73,22 +74,16 @@ class Window(Frame):
         self.password_entry.place(relx=0.03, rely=0.32, relwidth=0.4, relheight=0.07)
         self.password = self.password_entry
 
-        if settings_exist:
-            self.campus_key.set(settings)
-            self.password_entry.focus()
-        else:
-            self.campus_key_entry.focus()
-
         ini_label = Label(self, text='Master File')
         ini_label.place(relx=-0.11, rely=0.4, relwidth=0.4, relheight=0.07)
 
         self.options = StringVar()
-        self.ini_entry = OptionMenu(self, self.options, *tp.master_files)
+        self.ini_entry = OptionMenu(self, self.options, *tp.ebi_files)
         self.ini_entry.place(relx=0.03, rely=0.47, relwidth=0.4, relheight=0.07)
         self.ini = self.options
 
         self.save_settings = IntVar()
-        save_setting_box = Checkbutton(self, text='Remember Campus Key',
+        save_setting_box = Checkbutton(self, text='Save Settings',
                                       selectcolor='#4c9dd5', variable=self.save_settings,
                                       command='')
         save_setting_box.place(relx=-0.03, rely=0.58, relwidth=0.4, relheight=0.07)
@@ -99,18 +94,21 @@ class Window(Frame):
         clear_btn = Button(self, text='Clear Data', command=self.clear_all_entries)
         clear_btn.place(relx=0.28, rely=0.7)
 
-
+        # https://stackoverflow.com/questions/37234071/changing-the-background-color-of-a-radio-button-with-tkinter-in-python-3
+        style = ttk.Style()                     # Creating style element
+        style.configure('Wild.TRadiobutton',    # First argument is the name of style. Needs to end with: .TRadiobutton
+                        background='#4c9dd5',   # Setting background to our specified color above
+                        foreground='black')     # You can define colors like this also
 
         self.app = StringVar()
-        app_label = Label(self, text="Hello")
+        app_label = Label(self, text="Application")
         app_label.place(relx=-0.150, rely=0.85, relwidth=0.5, relheight=0.07)
-        ebi_radial_btn = Radiobutton(self,text='EBI',value='EBI',variable=self.app,command=self.app_type)
-        ebi_radial_btn.place(relx=0.03,rely=0.9)
-        hp_radial_btn = Radiobutton(self,text='Healthy Planet',value="Healthy Planet",variable=self.app, command=self.app_type)
-        hp_radial_btn.place(relx=0.15,rely=0.9)
 
-        test_label = Label(self, text=self.app.get())
-        test_label.place(relx=-.150,rely=0.75,relwidth=0.5, relheight=0.07)
+        ebi_radial_btn = ttk.Radiobutton(self,text='EBI',value='EBI',variable=self.app,command=self.app_type,style='Wild.TRadiobutton')
+        ebi_radial_btn.place(relx=0.03,rely=0.9)
+
+        hp_radial_btn = ttk.Radiobutton(self,text='Healthy Planet',value="Healthy Planet",variable=self.app, command=self.app_type,style='Wild.TRadiobutton')
+        hp_radial_btn.place(relx=0.15,rely=0.9)
 
         load = Image.open('img/Globe-Internet-icon.png')
         render = ImageTk.PhotoImage(load)
@@ -118,14 +116,21 @@ class Window(Frame):
         img.image = render
         img.place(relx=0.5, rely=0.13)
 
+        if settings_exist:
+            self.campus_key.set(settings['campus_key'])
+            self.app.set(settings['app'])
+            self.app_type()
+            self.password_entry.focus()
+        else:
+            self.campus_key_entry.focus()
+
     def client_exit(self):
         exit() # built-in python function
 
     def update_lst(self, dropdown, files):
-        dropdown.configure(state='active')  # set the list to active state
         dropdown['menu'].delete(0,'end') # remove the entries
         for ini in files: #update the optionMenu variable with new list of values
-            dropdown['menu'].add_command(label=ini,command=lambda name=ini: self.options.set(ini))
+            dropdown['menu'].add_command(label=ini,command=lambda name=ini: self.options.set(name))
         return dropdown
 
     def app_type(self):
@@ -160,6 +165,7 @@ class Window(Frame):
             return False
 
     def submit_clicked(self):
+        print(self.app.get())
         if self.validate_entry():
             login_settings ={
                 'userid':self.campus_key.get(),
@@ -168,7 +174,8 @@ class Window(Frame):
             }
             if self.save_settings.get()==1:
                 with open('data/settings.pickle', 'wb') as handle:
-                    pickle.dump(self.campus_key_entry.get(), handle)
+                    pickle_settings = {'campus_key':self.campus_key_entry.get(),'app':self.app.get()}
+                    pickle.dump(pickle_settings, handle)
 
             try: # check to see if there's an existing minimized window and update login settings
                 self.session.check_title()
