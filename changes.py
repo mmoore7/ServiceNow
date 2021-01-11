@@ -25,7 +25,7 @@ class CreateChange():
         # Remove notifications such as saving password
         chrome_options.add_experimental_option("prefs",prefs)
 
-        if sys.platform == 'Windows':
+        if sys.platform == 'Windows' or sys.platform == 'win32':
             self.driver = HiddenChromeWebDriver(executable_path='./driver/chromedriver.exe', chrome_options=chrome_options)
         else:
             self.driver = webdriver.Firefox()
