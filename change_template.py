@@ -18,10 +18,10 @@ class Templates():
         'HRX - Report Info',
         'HGR/HGT/HGP/RPT - Report Templates',
         'HGT - Query Template',
+        'IDM - Dashboard Configurations',
+        'IDB - Dashboard Component',
         # 'HGP - Parameter Prompts',
         'RPT - Report Output Files',
-        'IDM - Dashboard Configurations',
-        'IDB - Dashboard Component'
     ]
 
     template = {
@@ -48,6 +48,14 @@ class Templates():
             'plan':'Create record or create new contact for existing record.\nComplete changes.\nRelease the record(s)',
             'backout':'Unrelease the contact of the record.',
             'test':'Open a patient encounter.\nDocument a note with the smart tool.\nVerify tool behaves as expected.'
+        },
+        'E0P': {
+            'title':'Update/Create Action Criteria Record',
+            'ini': ['E0P'],
+            'rsn': 'Action criteria record for Epic datalink.',
+            'plan':'Create record or update existing one.\nWork with database admin to schedule datalink with this record.',
+            'backout':'Remove datalink from the execution schedule in SQL server.',
+            'test':'Run datalink in REL. Verify data was moved into Chronicles as expected.'
         },
         'HFR': {
             'title':'Update Registry',
