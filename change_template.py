@@ -9,7 +9,9 @@ class Templates():
         'HRX - Report Info',
         'IDM - Dashboard Configurations',
         'IDB - Dashboard Component',
+        'LPG/LRP - Print Group/Reports', #new
         'LVN - Navigator',
+        'LQF - SmartForms', # new
         'PAF - Column',
         'VCG - Grouper',
     ]
@@ -20,7 +22,6 @@ class Templates():
         'HGT - Query Template',
         'IDM - Dashboard Configurations',
         'IDB - Dashboard Component',
-        # 'HGP - Parameter Prompts',
         'RPT - Report Output Files',
     ]
 
@@ -113,6 +114,14 @@ class Templates():
             'backout':'Undo the changes',
             'test':'Open the dashboard. Verify dashboard component displays data as expected. Verify dashboard reports run correctly.'
         },
+        'LPG': {
+            'title':'Change the Appearance or Order of a Hyperspace Display Report',
+            'ini':['LPG','LRP'],
+            'rsn':'Update and/or break/fix for hyperspace report/print group',
+            'plan':'Update the print group and adjust layout/settings of report if applicable',
+            'backout':'Undo the change',
+            'test':'Open patient chart/encounter.\nVerify the report appears as expected'
+        },
         'LVN': {
             'title':'Update or Add Navigators for Existing Care Management Navigator Templates (LVN, VCN)',
             'ini':['LVN','VCN'],
@@ -120,6 +129,14 @@ class Templates():
             'plan':'Create the navigator section or topic.\nAdd VCN record if applicable.\nAdd section/topic to template',
             'backout':'Undo the change',
             'test':'Open a patient encounter.\nVerify the navigator appears and behaves as expected.'
+        },
+        'LQF': {
+            'title':'Physically rearranging items, adding new button choices, or new text boxes on a SmartForm ',
+            'ini':['LQF','HLX','E2X'],
+            'rsn':'Update to existing smartform',
+            'plan':'Update the smartform',
+            'backout':'Undo the changes. If changes are large, create a new copy of smartform and move up. Revert to old smartform',
+            'test':'Open patient encounter.\nVerify the smartform appears and behaves as expected.\nVerify smartdata elements file data as expected.'
         },
         'PAF': {
             'title':'Update/Create PAF Column',

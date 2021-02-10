@@ -2,11 +2,20 @@ from tkinter import *
 from tkinter import messagebox
 import tkinter.ttk as ttk
 from PIL import Image, ImageTk
-from changes import CreateChange
-from change_template import Templates as tp
 import re
 import os
 import pickle
+import logging
+import os
+from changes import CreateChange
+from change_template import Templates as tp
+
+logpath = os.path.join(os.getcwd(), 'Logs')
+if not os.path.exists(logpath):
+    os.mkdir(logpath)
+
+logging.basicConfig(filename=os.path.join(logpath,'Changes.log'), level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
+logger = logging.getLogger()
 
 class Window(Frame):
 
@@ -27,8 +36,10 @@ class Window(Frame):
                 settings = pickle.load(handle)
                 if isinstance(settings,dict):
                     settings_exist = True
+                    logger.info('Loaded settings')
                 else:
                     settings_exist = False
+                    logger.info('No settings found.')
         else:
             if not os.path.exists('./data'):
                 os.mkdir('./data')
@@ -189,6 +200,7 @@ class Window(Frame):
             except: # no existing title, so create new browser
                 self.session = CreateChange(login_settings)
                 self.session.start_browser()
+                logger.info('No browser detected. Starting a new one.')
 
             try:
                 self.session.login()
@@ -197,10 +209,11 @@ class Window(Frame):
                 self.session.driver.minimize_window()
                 messagebox.showerror('Hold Up', 'Something went wrong. If login was successful, please close browser and try again.')
                 self.clear_login_entry()
-                print(e)
+                logger.exception(f'There was an error: {e}')
 
         else:
             messagebox.showerror('This is so wrong', 'One or more entries are missing')
+            logger.info('Submission attempted with missing entries.')
 
 root = Tk() # define root window
 root.geometry('600x400')
