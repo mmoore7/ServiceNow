@@ -87,7 +87,7 @@ class CreateChange():
     def create_change(self):
         try:
             self.driver.implicitly_wait(10)
-            create_new_change = self.driver.find_element_by_id("concourse_module_323bb07bc611227a018aea9eb8f3b35e")
+            create_new_change = self.driver.find_element_by_id("concourse_module_92740c471b78b0905b25db91dd4bcb2b")
             create_new_change.click()
             logger.info('Navigating to change ticket form.')
 
