@@ -104,6 +104,9 @@ class Window(Frame):
         hp_radial_btn = ttk.Radiobutton(self,text='Healthy Planet',value="Healthy Planet",variable=self.app, command=self.app_type,style='Wild.TRadiobutton')
         hp_radial_btn.place(relx=0.15,rely=0.47)
 
+        amb_radial_btn = ttk.Radiobutton(self,text='Ambulatory',value="Ambulatory",variable=self.app, command=self.app_type,style='Wild.TRadiobutton')
+        amb_radial_btn.place(relx=0.35,rely=0.47)
+
         ini_label = Label(self, text='Master File')
         ini_label.place(relx=-0.11, rely=0.55, relwidth=0.4, relheight=0.07)
 
@@ -155,9 +158,12 @@ class Window(Frame):
         if self.app.get() == 'EBI':
             self.update_lst(self.ini_entry, tp.ebi_files)
             self.msg.configure(text='ENTERPRISE BUSINESS INTELLIGENCE')
-        else:
+        elif self.app.get() == 'Healthy Planet':
             self.update_lst(self.ini_entry, tp.master_files)
             self.msg.configure(text='HEALTHY PLANET')
+        else:
+            self.update_lst(self.ini_entry, tp.amb_files)
+            self.msg.configure(text='AMBULATORY')
 
     def validate_entry(self):
         if not all([self.campus_key.get(), self.password.get(), self.ini.get()]):

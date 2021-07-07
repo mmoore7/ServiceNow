@@ -1,4 +1,35 @@
 class Templates():
+
+    amb_files = [
+        'CER - Rules',
+        'DEP - Departments',
+        'EAF - I 34001 Request for Placement Pool',
+        'EAF - I 22340 EpicCare LinkUser Context',
+        'ETX/ELT/HH1/HHS - SmartTools',
+        'EMP - User item 450',
+        'EPD - Preference List Editor',
+        'E0P - Action Criteria',
+        'E2N - Activity',
+        'E2U - Menu',
+        'FLO - Flowsheets',
+        'HIP - Pools',
+        'HRV - Reason for Visit',
+        'LIM - Immunizations',
+        'LMN - Lot Manager',
+        'LPF - Preference List',
+        'LPR - Profile Amb Depts',
+        'LMN - Lot Manager',
+        'LVN - Navigator',
+        'LQL - Question',
+        'OSQ - Order Groups',
+        'PGP - Patient Provider Group',
+        'PLF - Patient Location Facility',
+        'PLS - Reading Pools',
+        'PRL - Protocols/Smartsets',
+        'SER - Provider MyChart Related',
+        'WDF - Patient Access System Def',
+    ]
+
     master_files = [
         'CER - Rules',
         'ETX/ELT/HH1/HHS - SmartTools',
@@ -24,7 +55,29 @@ class Templates():
         'IDB - Dashboard Component',
         'RPT - Report Output Files',
     ]
-
+"""
+Templates needed
+'PRL - Protocols/Smartsets'
+'LPF - Preference List'
+'OSQ - Order Groups'
+'EPD - Preference List Editor',
+'LQL - Question',
+'HRV - Reason for Visit'
+'LIM - Immunizations',
+'E2U - Menu'
+'LMN - Lot Manager',
+'WDF - Patient Access System Def'
+'PGP - Patient Provider Group'
+'EMP - User item 450'
+'HIP - Pools'
+'LPR - Profile Amb Depts'
+'PLS - Reading Pools'
+'PLF - Patient Location Facility'
+'DEP - Departments',
+'SER - Provider MyChart Related'
+'EAF - I 34001 Request for Placement Pool',
+'EAF - I 22340 EpicCare LinkUser Context',
+"""
     template = {
         'CER': {
             'title':'Update/Create Rule',
